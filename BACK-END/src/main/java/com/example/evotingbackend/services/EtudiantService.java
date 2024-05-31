@@ -1,18 +1,34 @@
 package com.example.evotingbackend.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.evotingbackend.models.Etudiant;
+import com.example.evotingbackend.models.enums.Filiere;
+import com.example.evotingbackend.models.enums.Role;
 import com.example.evotingbackend.repository.EtudiantRepository;
+import com.github.javafaker.Faker;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class EtudiantService {
+
+    private final Filiere[] filieres = Filiere.values();
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     private EtudiantRepository etudiantRepository;
+
+    private final Faker faker = new Faker();
 
     public ResponseEntity<?> getAllEtudiant() {
         return new ResponseEntity<>(etudiantRepository.findAll(), HttpStatus.OK);
@@ -56,5 +72,28 @@ public class EtudiantService {
         etudiantRepository.deleteById(id);
         return new ResponseEntity<>("Etudiant supprimé avec succes", HttpStatus.OK);
     }
+
+    public List<Etudiant> findByFiliereAndNiveau(Filiere filiere, int niveau) {
+        return etudiantRepository.findByFiliereAndNiveau(filiere, niveau);
+    }
+
+    public Etudiant dataGeneratorEtudiant() {
+        int randomIndex = faker.random().nextInt(filieres.length);
+        var etudiant = Etudiant.etudiantBuilder()
+                .build();
+        etudiant.setFirstname(faker.name().firstName());
+        etudiant.setLastname(faker.name().lastName());
+        etudiant.setEmail(faker.internet().emailAddress());
+        etudiant.setPassword(passwordEncoder.encode("12345"));
+        etudiant.setRole(Role.USER);
+        etudiant.setNiveau(faker.random().nextInt(1, 5));
+        etudiant.setFiliere(filieres[randomIndex]);
+        etudiant.setEst_eligible(false);
+        return etudiant;
+    }
+
+    // public void setEligible(Etudiant etudiant, int valEligibilite) {
+    // return;
+    // }
 
 }

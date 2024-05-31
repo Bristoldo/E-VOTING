@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.evotingbackend.models.Candidature;
-import com.example.evotingbackend.models.Etudiant;
 import com.example.evotingbackend.models.requests.CandidatureRequest;
+import com.example.evotingbackend.models.requests.VoterRequest;
 import com.example.evotingbackend.repository.CandidatureRepository;
 import com.example.evotingbackend.repository.EtudiantRepository;
 import com.example.evotingbackend.repository.ScrutinRepository;
@@ -62,18 +62,18 @@ public class CandidatureService {
         try {
 
             candidatureRepository.findById(id).orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
-            
+
             var etudiant = etudiantRepository.findById(new_candidatureRequest.getEtudiant_id()).orElse(null);
 
             var scrutin = scrutinRepository.findById(new_candidatureRequest.getScrutin_id()).orElse(null);
 
             var candidature = Candidature.builder()
-                .id(id)
-                .date_postuler(new_candidatureRequest.getDate_postuler())
-                .nombre_voix(new_candidatureRequest.getNombre_voix())
-                .etudiant(etudiant)
-                .scrutin(scrutin)
-                .build();
+                    .id(id)
+                    .date_postuler(new_candidatureRequest.getDate_postuler())
+                    .nombre_voix(new_candidatureRequest.getNombre_voix())
+                    .etudiant(etudiant)
+                    .scrutin(scrutin)
+                    .build();
             candidatureRepository.save(candidature);
 
             return new ResponseEntity<>("Candidature mise a jour avec succes", HttpStatus.OK);
@@ -91,4 +91,22 @@ public class CandidatureService {
         return new ResponseEntity<>("Candidature supprimé avec succes", HttpStatus.OK);
     }
 
+
+    public ResponseEntity<?> voterCandidature(VoterRequest voterRequest) {
+
+        try {
+            var candidature = candidatureRepository.findById(voterRequest.getIdCandidature())
+                    .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+            candidature.setNombre_voix(candidature.getNombre_voix() + 1);
+
+            var etudiant = etudiantRepository.findById(voterRequest.getIdUser()).orElse(null);
+            etudiant.setEst_eligible(false);
+
+            etudiantRepository.save(etudiant);
+            candidatureRepository.save(candidature);
+            return new ResponseEntity<>("Vote effectué avec succes", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

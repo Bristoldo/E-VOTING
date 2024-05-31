@@ -2,8 +2,13 @@ package com.example.evotingbackend.models;
 
 import java.util.Set;
 
+import com.example.evotingbackend.models.enums.Filiere;
+import com.example.evotingbackend.models.enums.Option;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,10 +33,15 @@ public class Etudiant extends User {
     private Integer niveau;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Filiere filiere;
 
     @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
     private Option option;
+
+    @Column(nullable = false)
+    private boolean est_eligible;
 
     @OneToMany(mappedBy = "etudiant")
     private Set <Candidature> candidatures;

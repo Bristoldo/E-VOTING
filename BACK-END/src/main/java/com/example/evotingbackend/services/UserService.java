@@ -10,6 +10,7 @@ import com.example.evotingbackend.repository.UserRepository;
 @Service
 public class UserService {
 
+
     @Autowired
     private UserRepository userRepository;
 
