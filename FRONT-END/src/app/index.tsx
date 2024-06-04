@@ -104,7 +104,9 @@ export default function Condidtions() {
                 title="Continuer"
                 color="coral"
                 disabled={!checked}
-                onPress={() => console.log("")}
+                onPress={() => console.log("")
+                  
+                }
               />
             </Link>
           </View>

@@ -1,14 +1,16 @@
 package com.example.evotingbackend.services;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.evotingbackend.models.Candidature;
 import com.example.evotingbackend.models.Etudiant;
 import com.example.evotingbackend.models.enums.Filiere;
 import com.example.evotingbackend.models.enums.Role;
@@ -79,6 +81,12 @@ public class EtudiantService {
 
     public Etudiant dataGeneratorEtudiant() {
         int randomIndex = faker.random().nextInt(filieres.length);
+        int annee = faker.random().nextInt(10, 24);
+
+        int numId = faker.random().nextInt(0000, 9999);
+
+        String matricule = "CM-UDS-" + annee + "SCI" + numId;
+
         var etudiant = Etudiant.etudiantBuilder()
                 .build();
         etudiant.setFirstname(faker.name().firstName());
@@ -86,14 +94,20 @@ public class EtudiantService {
         etudiant.setEmail(faker.internet().emailAddress());
         etudiant.setPassword(passwordEncoder.encode("12345"));
         etudiant.setRole(Role.USER);
+        etudiant.setMatricule(matricule);
         etudiant.setNiveau(faker.random().nextInt(1, 5));
         etudiant.setFiliere(filieres[randomIndex]);
         etudiant.setEst_eligible(false);
+ 
+        // for (Candidature cand : candidatures) {
+        //     Candidature candidature = Candidature.builder()
+        //                             .date_postuler(cand.getDate_postuler())
+        //                             .etudiant(etudiant)
+        //                             .build();
+        //     candidatures.add(candidature);
+        // }
+        Hibernate.initialize(etudiant.getCandidatures());
+        etudiant.setCandidatures(new ArrayList<Candidature>());
         return etudiant;
     }
-
-    // public void setEligible(Etudiant etudiant, int valEligibilite) {
-    // return;
-    // }
-
 }

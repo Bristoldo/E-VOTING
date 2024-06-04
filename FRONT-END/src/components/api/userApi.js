@@ -2,17 +2,18 @@ import ApiManager from './apiManager';
 
 export const user_login = async data => {
   try {
-    const result = await ApiManager ("/candidature", {
+    console.log(data);
+    const result = await ApiManager ("/authenticate", {
       method: "POST",
-      headers: {
-        'content-type': "application/json",
-        "Access-Control-Allow-Origin": "*",      
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",      
-      },
+        headers: {
+          "Context-Type": "application/json",
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
   data: data,
     });
     return result;
   } catch (error) {
-    return error.response.data;
+    return error;
   }
 };

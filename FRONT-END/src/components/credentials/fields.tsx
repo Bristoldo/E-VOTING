@@ -1,39 +1,40 @@
+import axios from "axios";
+import { Link } from "expo-router";
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { user_login } from "../api/userApi";
-import {
-  Poppins_900Black_Italic,
-  Poppins_500Medium,
-  Poppins_800ExtraBold,
-  Poppins_100Thin,
-  Poppins_600SemiBold_Italic,
-  Poppins_300Light,
-  Poppins_700Bold,
-  Poppins_400Regular,
-  useFonts,
-} from "@expo-google-fonts/poppins";
-import { Link } from "expo-router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    user_login({
-      email: email,
-      password: password,
-    })
-      .then((result) => {
-        if (result.status == 200) {
-          console.log(result);
-          console.log("AccessToken", result.data.token);
-        } else {
-          console.log("error");
-        }
+    axios
+      .get("http://127.0.0.1:8080/api/auth/candidature", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json", 
+          "Access-Control-Allow-Origin": "*",
+        },
       })
-      .catch((err) => {
-        console.log(err);
+      .then((result) => {
+        return console.log(result.data);
       });
+    // user_login({
+    //   email: email,
+    //   password: password,
+    // })
+    //   .then((result) => {
+    //     if (result.status == 200) {
+    //       console.log(result);
+    //       console.log("AccessToken", result);
+    //     } else {
+    //       console.log("error");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   function changeHandlerEmail(val) {
@@ -60,11 +61,14 @@ export default function Login() {
           onChangeText={(val) => changeHandlerPassword(val)}
           // value={password}
         />
-        <Link href={"/help"}>
-          <Text style={styles.probText}>Probleme de connexion? </Text>
+        <Link href={"/help"} style={styles.help}>
+          <Text style={styles.probText}>Probleme de connexion ? </Text>
         </Link>
       </View>
+      <Link href={"/user/candidature/candidatures"} style={styles.help}>
       <Button onPress={() => handleLogin()} title="Connexion" color="coral" />
+      </Link>
+  
     </View>
   );
 }
@@ -97,6 +101,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   probText: {
-    color: "dark",
+    color: "gray",
+    fontFamily: "Poppins_300Light",
+  },
+  help: {
+    marginBottom: 10,
   },
 });

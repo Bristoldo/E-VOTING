@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CandidatureRequest {
     
-    private Integer id;
+    // private Integer id;
 
     private Date date_postuler;
     

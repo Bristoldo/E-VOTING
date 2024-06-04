@@ -7,12 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.evotingbackend.config.JwtService;
-import com.example.evotingbackend.models.Admin;
 import com.example.evotingbackend.models.Etudiant;
 import com.example.evotingbackend.models.User;
 import com.example.evotingbackend.models.enums.Filiere;
 import com.example.evotingbackend.models.enums.Role;
-import com.example.evotingbackend.repository.AdminRepository;
 import com.example.evotingbackend.repository.EtudiantRepository;
 import com.example.evotingbackend.repository.UserRepository;
 import com.example.evotingbackend.token.Token;
@@ -72,7 +70,7 @@ public class AuthenticationService {
                                                 request.getPassword()));
                 var user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow();
-
+                
                 var etudiant = etudiantRepository.findById(user.getId()).get();
 
                 var jwtToken = jwtService.generateToken(user);

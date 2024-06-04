@@ -2,6 +2,7 @@ package com.example.evotingbackend.models;
 
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class Vote {
     @Column(nullable = false)
     private Date date_vote;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Scrutin scrutin;
 
 }

@@ -1,20 +1,23 @@
 package com.example.evotingbackend.models;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.example.evotingbackend.models.enums.Filiere;
 import com.example.evotingbackend.models.enums.Option;
 import com.example.evotingbackend.models.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +35,8 @@ import lombok.NoArgsConstructor;
 public class Scrutin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "scrutins_seq")
+    @SequenceGenerator(name = "scrutins_seq", sequenceName = "scrutins_seq", allocationSize = 1)
     private Integer id;
 
     @Column(nullable = false)
@@ -41,7 +45,7 @@ public class Scrutin {
 
     @Column(nullable = false)
     private Date date_debut;
-    
+
     private Date date_fin;
 
     @Column(nullable = false)
@@ -61,9 +65,10 @@ public class Scrutin {
     @Column(nullable = false)
     private Date delais_cand;
 
-    @OneToMany(mappedBy = "scrutin")
-    private Set <Candidature> candidatures;
-
-    @OneToMany(mappedBy = "scrutin")
-    private Set <Vote> votes;
+    @OneToMany(mappedBy = "scrutin", fetch = FetchType.EAGER)
+    private List<Candidature> candidatures;
+   
+    @JsonIgnore
+    @OneToMany(mappedBy = "scrutin", fetch = FetchType.EAGER)
+    private List<Vote> votes;
 }
