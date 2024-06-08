@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.evotingbackend.models.enums.Role;
 import com.example.evotingbackend.token.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
