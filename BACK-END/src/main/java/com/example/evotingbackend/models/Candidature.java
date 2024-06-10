@@ -37,7 +37,6 @@ public class Candidature {
     @Column(nullable = false)
     private Integer nombre_voix;
     
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "etudiant_id")
     private Etudiant etudiant;

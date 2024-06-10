@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.evotingbackend.models.Candidature;
+import com.example.evotingbackend.models.enums.Filiere;
 import com.example.evotingbackend.models.requests.CandidatureRequest;
 import com.example.evotingbackend.models.requests.VoterRequest;
 import com.example.evotingbackend.repository.CandidatureRepository;
@@ -18,6 +19,8 @@ import com.github.javafaker.Faker;
 
 @Service
 public class CandidatureService {
+
+    private final Filiere[] filieres = Filiere.values();
 
     private final Faker faker = new Faker();
 
@@ -122,33 +125,43 @@ public class CandidatureService {
 
     public Candidature dataGeneratorCandidature() {
 
-        var etudiants = etudiantRepository.findAll().stream().toList();
-        var scrutins = scrutinRepository.findAll().stream().toList();
+        int randomIndexF = faker.random().nextInt(filieres.length - 1);
 
-        int randomIndex1 = faker.random().nextInt(etudiants.size()-1);
-        int randomIndex2 = faker.random().nextInt(scrutins.size()-1);
+        var randomFiliere = filieres[randomIndexF];
 
-        var etudiant_choisi = etudiants.get(randomIndex1);
-        var scrutin_choisi = scrutins.get(randomIndex2);
+        var randomNiveau = faker.random().nextInt(1, 5);
 
-        var candidature = Candidature.builder()
-        .date_postuler(new Date(System.currentTimeMillis() + faker.random().nextInt(100, 1000)))
-        .nombre_voix(0)
-        .etudiant(etudiant_choisi)
-        .scrutin(scrutin_choisi)
-        .build();
+        var etudiants = etudiantRepository.findByFiliereAndNiveau(randomFiliere, randomNiveau).stream().toList();
+        var scrutins = scrutinRepository.findByFiliereAndNiveau(randomFiliere, randomNiveau).stream().toList();
 
-        var candidatures_EC = etudiant_choisi.getCandidatures();
-        candidatures_EC.add(candidature);
-        Hibernate.initialize(etudiant_choisi.getCandidatures());
-        etudiant_choisi.setCandidatures(candidatures_EC);
-        etudiantRepository.save(etudiant_choisi);
-        
-        var candidatures_SC = scrutin_choisi.getCandidatures();
-        candidatures_SC.add(candidature);
-        Hibernate.initialize(scrutin_choisi.getCandidatures());
-        scrutin_choisi.setCandidatures(candidatures_SC);
-        scrutinRepository.save(scrutin_choisi);
-        return candidature;
+        if (etudiants.size() > 0 || scrutins.size() > 0) {
+
+            int randomIndex1 = faker.random().nextInt(0, etudiants.size() - 1);
+            int randomIndex2 = faker.random().nextInt(0, scrutins.size() - 1);
+
+            var etudiant_choisi = etudiants.get(randomIndex1);
+            var scrutin_choisi = scrutins.get(randomIndex2);
+
+            var candidature = Candidature.builder()
+                    .date_postuler(new Date(System.currentTimeMillis() + faker.random().nextInt(100, 1000)))
+                    .nombre_voix(0)
+                    .etudiant(etudiant_choisi)
+                    .scrutin(scrutin_choisi)
+                    .build();
+
+            var candidatures_EC = etudiant_choisi.getCandidatures();
+            candidatures_EC.add(candidature);
+            Hibernate.initialize(etudiant_choisi.getCandidatures());
+            etudiant_choisi.setCandidatures(candidatures_EC);
+            etudiantRepository.save(etudiant_choisi);
+
+            var candidatures_SC = scrutin_choisi.getCandidatures();
+            candidatures_SC.add(candidature);
+            Hibernate.initialize(scrutin_choisi.getCandidatures());
+            scrutin_choisi.setCandidatures(candidatures_SC);
+            scrutinRepository.save(scrutin_choisi);
+            return candidature;
+        }
+        return null;
     }
 }
