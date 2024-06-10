@@ -98,7 +98,7 @@ export default function Details () {
                 marginBottom: 20,
               }}
             >
-              <Text style={global_style.p_regular}>
+              <Text style={[global_style.p_regular, {color: "rgb(213, 61, 78)"}]}>
                 Informations
               </Text>
             </View>
@@ -147,10 +147,9 @@ export default function Details () {
                         Mon role est de vous presenter et de faire entendre vos preocupations et suggestions aupres de l'administration et des professeurs.{'\n'}   
                         Coordialement.
                     </Text>
-                    
               </ScrollView>
             </View> 
-            <Button title="voter" color="rgb(213, 61, 78)" onPress={() => voterCandidat (candidature.id)}/>
+            { global.voter && <Button title="voter" color="rgb(213, 61, 78)" onPress={() => voterCandidat (candidature.id)}/>}
           </View> 
         </View>
     </ScrollView> 

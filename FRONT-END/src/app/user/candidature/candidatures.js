@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import Candidature from '../../../components/candidature/candidature';
 
 
-export default function Details () {
+export default function Candidatures () {
   const global_style = require ('../../../components/styles/bg-fonts');
 
   const filiere = 'PHILOSOPHIE';
@@ -49,6 +49,8 @@ export default function Details () {
   useEffect (() => {
     getScrutins (data);
   }, []);
+
+global.voter = true;
 
   return (
     <>

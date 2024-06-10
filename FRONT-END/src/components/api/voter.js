@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { voter } from '../styles/bg-fonts';
 
 const url = 'http://127.0.0.1:8080/api/auth/candidature/voter';
 
@@ -72,6 +73,7 @@ const voterUser = async (idUser, idCandidature) => {
 // }
 
 export default function voterCandidat (idCandidature) {
+  global.voter = false;
   //   const user = getToken ();
   //   console.log (user);
   const user = {id: 99};
