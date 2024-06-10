@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evotingbackend.models.Actualite;
-import com.example.evotingbackend.models.Candidature;
 import com.example.evotingbackend.models.requests.CandidatureRequest;
+import com.example.evotingbackend.models.requests.VoterRequest;
 import com.example.evotingbackend.services.CandidatureService;
 
 @RestController
@@ -39,13 +38,19 @@ public class CandidatureController {
     }
 
     @PutMapping(value = { "/{id}", "{id}" })
-    public ResponseEntity<?> updateCandidature(@RequestBody CandidatureRequest new_candidatureRequest, @PathVariable Integer id) {
+    public ResponseEntity<?> updateCandidature(@RequestBody CandidatureRequest new_candidatureRequest,
+            @PathVariable Integer id) {
         return candidatureService.updateCandidature(new_candidatureRequest, id);
     }
 
     @DeleteMapping(value = { "/{id}", "{id}" })
     public ResponseEntity<?> deleteCandidature(@PathVariable Integer id) {
         return candidatureService.deleteCandidature(id);
+    }
+
+    @PostMapping(value = { "/voter", "voter" })
+    public ResponseEntity<?> voterCandidature(@RequestBody VoterRequest voterRequest) {
+        return candidatureService.voterCandidature(voterRequest);
     }
 
 }
