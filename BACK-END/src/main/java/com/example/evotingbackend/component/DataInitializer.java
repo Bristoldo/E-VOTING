@@ -14,11 +14,11 @@ import com.example.evotingbackend.services.ScrutinService;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    public final int numberEtudiants = 20;
+    public final int numberEtudiants = 0;
 
-    public final int numberCandidature = 15;
+    public final int numberCandidature = 500;
 
-    public final int numberScrutins = 5;
+    public final int numberScrutins = 0;
 
     @Autowired
     private EtudiantService etudiantService;
@@ -40,9 +40,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        generateEtudiant(numberEtudiants);
-        generateScrutin(numberScrutins);
-        generateCandidature(numberCandidature);
+        // generateEtudiant(numberEtudiants);
+        // generateScrutin(numberScrutins);
+        // generateCandidature(numberCandidature);
     }
 
     public void generateEtudiant(int numberEtudiants) {

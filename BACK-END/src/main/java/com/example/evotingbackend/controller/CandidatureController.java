@@ -2,6 +2,7 @@ package com.example.evotingbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.example.evotingbackend.services.CandidatureService;
 
 @RestController
 @RequestMapping("/api/auth/candidature")
+@CrossOrigin
 public class CandidatureController {
 
     @Autowired
@@ -27,7 +29,7 @@ public class CandidatureController {
         return candidatureService.getAllCandidature();
     }
 
-    @GetMapping(value = { "/{id}", "{id}" })
+    @GetMapping(value = { "/{id}", "/{id}/" })
     public ResponseEntity<?> findCandidature(@PathVariable Integer id) {
         return candidatureService.findCandidature(id);
     }
@@ -37,18 +39,18 @@ public class CandidatureController {
         return candidatureService.createCandidature(candidature);
     }
 
-    @PutMapping(value = { "/{id}", "{id}" })
+    @PutMapping(value = { "/{id}", "/{id}/" })
     public ResponseEntity<?> updateCandidature(@RequestBody CandidatureRequest new_candidatureRequest,
             @PathVariable Integer id) {
         return candidatureService.updateCandidature(new_candidatureRequest, id);
     }
 
-    @DeleteMapping(value = { "/{id}", "{id}" })
+    @DeleteMapping(value = { "/{id}", "/{id}/" })
     public ResponseEntity<?> deleteCandidature(@PathVariable Integer id) {
         return candidatureService.deleteCandidature(id);
     }
 
-    @PostMapping(value = { "/voter", "voter" })
+    @PostMapping(value = { "/voter", "/voter/" })
     public ResponseEntity<?> voterCandidature(@RequestBody VoterRequest voterRequest) {
         return candidatureService.voterCandidature(voterRequest);
     }

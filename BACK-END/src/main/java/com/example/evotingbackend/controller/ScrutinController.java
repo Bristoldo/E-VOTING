@@ -18,7 +18,7 @@ import com.example.evotingbackend.services.ScrutinService;
 
 @RestController
 @RequestMapping("/api/auth/scrutin")
-@CrossOrigin("*")
+@CrossOrigin
 public class ScrutinController {
 
     @Autowired

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.evotingbackend.models.enums.Filiere;
 import com.example.evotingbackend.models.enums.Option;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +30,7 @@ public class Etudiant extends User {
 
     @Column(nullable = true, unique = true)
     private String matricule;
-    
+
     @Column(nullable = false)
     private Integer niveau;
 
@@ -43,7 +44,8 @@ public class Etudiant extends User {
 
     @Column(nullable = false)
     private boolean est_eligible;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER)
     private List<Candidature> candidatures;
 }
