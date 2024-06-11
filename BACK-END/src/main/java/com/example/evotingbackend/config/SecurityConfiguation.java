@@ -27,26 +27,35 @@ public class SecurityConfiguation {
 
         private final LogoutHandler logoutHandler;
 
+        @SuppressWarnings("removal")
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-            http
-                    .csrf(csrf -> csrf
-                            .disable())
-                    .authorizeHttpRequests(requests -> requests
-                            .requestMatchers("/api/auth/**")
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated())
-                    .sessionManagement(management -> management
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authenticationProvider(authenticationProvider)
-                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                    .logout(logout -> logout
-                            .logoutUrl("/api/auth/logout")
-                            .addLogoutHandler(logoutHandler)
-                            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder
-                                    .clearContext()));
+                http
+                                // .csrf().disable().cors().and()
+                                .csrf(csrf -> {
+                                        try {
+                                                csrf
+                                                .disable().cors();
+                                        } catch (Exception e) {
+                                                e.printStackTrace();
+                                        }
+                                })
+                                .authorizeHttpRequests(requests -> requests
+                                                .requestMatchers("/api/auth/**")
+                                                .permitAll()
+                                                .anyRequest()
+                                                .authenticated())
+                                .sessionManagement(management -> management
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                                .logout(logout -> logout
+                                                .logoutUrl("/api/auth/logout")
+                                                .addLogoutHandler(logoutHandler)
+                                                .logoutSuccessHandler((request, response,
+                                                                authentication) -> SecurityContextHolder
+                                                                                .clearContext()));
                 return http.build();
         }
 
