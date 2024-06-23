@@ -7,4 +7,7 @@ import com.example.evotingbackend.models.Candidature;
 
 public interface CandidatureRepository extends  JpaRepository<Candidature, Integer> {
 
+    
 }
+
+// activity indicator

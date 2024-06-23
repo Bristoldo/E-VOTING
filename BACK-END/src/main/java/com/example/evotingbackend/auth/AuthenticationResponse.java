@@ -1,9 +1,9 @@
 package com.example.evotingbackend.auth;
 
 
-import com.example.evotingbackend.models.Filiere;
-import com.example.evotingbackend.models.Option;
-import com.example.evotingbackend.models.Role;
+import com.example.evotingbackend.models.enums.Filiere;
+import com.example.evotingbackend.models.enums.Option;
+import com.example.evotingbackend.models.enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

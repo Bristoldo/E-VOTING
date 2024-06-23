@@ -1,4 +1,4 @@
-package com.example.evotingbackend.models;
+package com.example.evotingbackend.models.enums;
 
 public enum Filiere {
     INFORMATIQUE,
