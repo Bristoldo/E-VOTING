@@ -7,12 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.evotingbackend.config.JwtService;
-import com.example.evotingbackend.models.Admin;
 import com.example.evotingbackend.models.Etudiant;
-import com.example.evotingbackend.models.Filiere;
-import com.example.evotingbackend.models.Role;
 import com.example.evotingbackend.models.User;
-import com.example.evotingbackend.repository.AdminRepository;
+import com.example.evotingbackend.models.enums.Filiere;
+import com.example.evotingbackend.models.enums.Role;
 import com.example.evotingbackend.repository.EtudiantRepository;
 import com.example.evotingbackend.repository.UserRepository;
 import com.example.evotingbackend.token.Token;
@@ -29,8 +27,6 @@ public class AuthenticationService {
 
         private final EtudiantRepository etudiantRepository;
 
-        private final AdminRepository adminRepository;
-
         private final TokenRepository tokenRepository;
 
         private final PasswordEncoder passwordEncoder;
@@ -43,7 +39,6 @@ public class AuthenticationService {
 
                 var etudiant = Etudiant.etudiantBuilder()
                                 .build();
-
                 etudiant.setFirstname(request.getFirstname());
                 etudiant.setLastname(request.getLastname());
                 etudiant.setEmail(request.getEmail());
@@ -51,14 +46,12 @@ public class AuthenticationService {
                 etudiant.setRole(Role.USER);
                 etudiant.setNiveau(1);
                 etudiant.setFiliere(Filiere.INFORMATIQUE);
-                
 
                 User savedUser = etudiantRepository.save(etudiant);
                 var jwtToken = jwtService.generateToken(etudiant);
 
                 revokeAllUserTokens(savedUser);
                 saveUserToken(savedUser, jwtToken);
-
 
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
@@ -77,14 +70,14 @@ public class AuthenticationService {
                                                 request.getPassword()));
                 var user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow();
-
+                
                 var etudiant = etudiantRepository.findById(user.getId()).get();
 
                 var jwtToken = jwtService.generateToken(user);
 
                 revokeAllUserTokens(user);
                 saveUserToken(user, jwtToken);
- 
+
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
                                 .firstname(etudiant.getFirstname())
@@ -95,11 +88,10 @@ public class AuthenticationService {
                                 .build();
         }
 
-
-        private void revokeAllUserTokens(User user){
+        private void revokeAllUserTokens(User user) {
                 var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
-                if(validUserTokens.isEmpty())
-                return;
+                if (validUserTokens.isEmpty())
+                        return;
                 validUserTokens.forEach(t -> {
                         t.setExpired(true);
                         t.setRevoked(true);
@@ -108,13 +100,10 @@ public class AuthenticationService {
                 tokenRepository.saveAll(validUserTokens);
         }
 
-
         public ResponseEntity<?> logout(AuthenticationRequest request) {
                 return null;
         }
 
-
-        
         private void saveUserToken(User user, String jwToken) {
 
                 var token = Token.builder()
